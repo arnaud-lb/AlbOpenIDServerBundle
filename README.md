@@ -14,6 +14,10 @@ Add the following lines in your deps file:
 [AlbOpenIDServerBundle]
     git=git://github.com/arnaud-lb/AlbOpenIDServerBundle.git
     target=bundles/Alb/AlbOpenIDServerBundle
+    
+[php-openid]
+    git=git://github.com/openid/php-openid.git
+    target=openid/php-openid
 ```
 
 Now, run the vendors script to download the bundle:
@@ -28,6 +32,7 @@ If you prefer instead to use git submodules, then run the following:
 
 ``` sh
 $ git submodule add git://github.com/arnaud-lb/AlbOpenIDServerBundle.git vendor/bundles/Alb/AlbOpenIDServerBundle
+$ git submodule add git://github.com/openid/php-openid.git vendor/openid/php-openid
 $ git submodule update --init
 ```
 
@@ -52,7 +57,27 @@ $loader->registerNamespaces(array(
 ));
 ```
 
-### Step3: Enable the bundle
+### Step3: Configure the include path
+
+php-openid relies on his classes to be in the include path:
+
+``` php
+<?php
+
+/// app/autoload.php
+
+...
+
+set_include_path(
+    get_include_path()
+    . PATH_SEPARATOR 
+    . __DIR__ . '/../vendor/openid/php-openid'
+);
+
+...
+```
+
+### Step4: Enable the bundle
 
 Finally, enable the bundle in the kernel:
 
