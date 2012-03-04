@@ -1,0 +1,13 @@
+
+{% extends "::base.html.twig" %}
+
+{% block body %}
+
+    <form action="{{ form_action }}" method="POST" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <input type="submit" name="trust" value="Authenticate" />
+    </form>
+
+{% endblock %}
+
+

@@ -4,7 +4,23 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="AlbOpenIDServerBundle_homepage" pattern="/hello/{name}">
-        <default key="_controller">AlbOpenIDServerBundle:Default:index</default>
+    <route id="alb_open_id_server_endpoint" pattern="/">
+        <default key="_controller">alb_open_id_server.controller:indexAction</default>
     </route>
+
+    <route id="alb_open_id_server_identifier" pattern="/id/{unique}.{_format}">
+        <default key="_controller">alb_open_id_server.controller:identifierAction</default>
+        <default key="_format" />
+        <requirement key="_format">|xrds</requirement>
+    </route>
+
+    <route id="alb_open_id_server_trust" pattern="/trust">
+        <default key="_controller">alb_open_id_server.controller:trustAction</default>
+    </route>
+
+    <route id="alb_open_id_server_xrds" pattern="/xrds">
+        <default key="_controller">alb_open_id_server.controller:xrdsAction</default>
+        <default key="_format">xml</default>
+    </route>
+
 </routes>
