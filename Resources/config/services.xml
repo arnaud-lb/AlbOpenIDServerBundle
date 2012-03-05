@@ -8,6 +8,7 @@
         <parameter key="alb_open_id_server.controller.class">Alb\OpenIDServerBundle\Controller\OpenIDServerController</parameter>
         <parameter key="alb_open_id_server.server.class">Auth_OpenID_Server</parameter>
         <parameter key="alb_open_id_server.server_storage.class">Auth_OpenID_FileStore</parameter>
+        <parameter key="alb_open_id_server.default_adapter.class">Alb\OpenIDServerBundle\Adapter\DefaultAdapter</parameter>
     </parameters>
 
     <services>
@@ -33,6 +34,10 @@
         </service>
 
         <service id="alb_open_id_server.server_storage" alias="alb_open_id_server.server_storage.real" />
+
+        <service id="alb_open_id_server.default_adapter" class="%alb_open_id_server.default_adapter.class%">
+        </service>
+
     </services>
 
 </container>
