@@ -21,11 +21,13 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('alb_open_id_server');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('service')
-                    ->isRequired()
+                    ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('adapter')
+                                ->defaultValue('alb_open_id_server.default_adapter')
                                 ->isRequired()
                                 ->canNotBeEmpty()
                             ->end()
