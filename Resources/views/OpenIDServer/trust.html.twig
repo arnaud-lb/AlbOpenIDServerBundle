@@ -3,6 +3,21 @@
 
 {% block body %}
 
+    <p>You are about to authenticate yourself on a third party site using your account.</p>
+
+    {% if requested_fields|length %}
+        <p>In addition, the following informations will be made available to the third party:</p>
+
+        <ul>
+            {% for name, value in requested_fields %}
+                <li>
+                    {% set key='trust_form.field_with_value.'~name %}
+                    {{ key|trans({"%value%": value|escape}, 'AlbOpenIdServerBundle')|raw }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <form action="{{ form_action }}" method="POST" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <input type="submit" name="trust" value="Authenticate" />

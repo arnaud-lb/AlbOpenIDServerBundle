@@ -83,10 +83,7 @@ class OpenIDServerController
 
     public function trustAction(Request $request)
     {
-        $form = $this->formFactory
-            ->createNamedBuilder('form', 'openid_trust')
-            ->getForm()
-            ;
+        require_once 'Auth/OpenID/SReg.php';
 
         $server = $this->getServer();
 
@@ -107,6 +104,12 @@ class OpenIDServerController
             throw new HttpException(400);
         }
 
+        $sRegRequest = \Auth_OpenID_SRegRequest::fromOpenIDRequest($openidRequest);
+        $user = $this->securityContext->getToken()->getUser();
+        $fields = $this->getFieldsData($user, $sRegRequest);
+
+        $form = $this->createTrustForm($user, $sRegRequest);
+
         if ('POST' === $request->getMethod()) {
 
             $form->bindRequest($request);
@@ -114,12 +117,16 @@ class OpenIDServerController
             $trust = $request->request->get('trust');
 
             if ($form->isValid() && !empty($trust)) {
-                
-                $unique = $this->adapter->getUserUnique($this->securityContext->getToken()->getUser());
+
+                $unique = $this->adapter->getUserUnique($user);
 
                 $identifier = $this->getIdentifierUri($unique);
 
                 $openidResponse = $openidRequest->answer(true, null, $identifier);
+
+                $sRegResponse = \Auth_OpenID_SRegResponse::extractResponse($sRegRequest, $fields);
+                $sRegResponse->toMessage($openidResponse->fields);
+
                 $webResponse = $server->encodeResponse($openidResponse);
                 return $this->convertResponse($webResponse);
             }
@@ -129,7 +136,27 @@ class OpenIDServerController
         return $this->render($template, array(
             'form' => $form->createView(),
             'form_action' => $this->getTrustUri($params),
+            'requested_fields' => $fields,
         ));
+    }
+
+    protected function createTrustForm()
+    {
+        $form = $this->formFactory
+            ->createNamedBuilder('form', 'open_id_trust')
+            ->getForm();
+
+        return $form;
+    }
+
+    protected function getFieldsData($user, $sRegRequest)
+    {
+        $fields = array_merge(
+            $sRegRequest->optional,
+            $sRegRequest->required
+        );
+
+        return $this->adapter->getUserData($user, $fields);
     }
 
     public function xrdsAction()
