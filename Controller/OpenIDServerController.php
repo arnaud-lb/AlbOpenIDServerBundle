@@ -57,6 +57,10 @@ class OpenIDServerController
             ));
         }
 
+        if (!$openidRequest instanceof \Auth_OpenID_Request) {
+            $this->handleServerError($openidRequest);
+        }
+
         if ('checkid_setup' === $openidRequest->mode) {
 
             $uri = $this->getTrustUri($params);
@@ -93,6 +97,10 @@ class OpenIDServerController
 
         if (!$openidRequest) {
             throw new HttpException(400);
+        }
+
+        if (!$openidRequest instanceof \Auth_OpenID_Request) {
+            return $this->handleServerError($openidRequest);
         }
 
         if ('checkid_setup' !== $openidRequest->mode) {
@@ -175,6 +183,15 @@ class OpenIDServerController
             $openidWebResponse->code,
             (array) $openidWebResponse->headers
         );
+    }
+
+    protected function handleServerError($error)
+    {
+        if ($error instanceof \Auth_OpenID_ServerError) {
+            throw new HttpException(400, $error->text);
+        } else {
+            throw new HttpException(400, 'Uknown error');
+        }
     }
 
     protected function decodeQuery($query)
