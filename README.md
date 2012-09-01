@@ -151,6 +151,24 @@ alb_open_id_server:
     prefix: /openid
 ```
 
+### Security
+
+For access session security data, add this to app/config/security.yml:
+
+``` yaml
+security:
+    ...
+
+    firewalls:
+        ...
+
+        secured_openid:
+            pattern:    ^/openid
+            anonymous: ~
+            http_basic:
+                realm: "Secured OpenID Area"
+```
+
 ## Usage
 
 The OpenID endpoint is at /openid (depending on the routes prefix)
