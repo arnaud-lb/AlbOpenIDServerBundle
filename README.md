@@ -13,7 +13,7 @@ Add the following lines in your deps file:
 ```
 [AlbOpenIDServerBundle]
     git=git://github.com/arnaud-lb/AlbOpenIDServerBundle.git
-    target=bundles/Alb/AlbOpenIDServerBundle
+    target=bundles/Alb/OpenIDServerBundle
     
 [php-openid]
     git=git://github.com/openid/php-openid.git
@@ -53,7 +53,7 @@ Add the ``Alb`` namespace to your autoloader:
 
 $loader->registerNamespaces(array(
     // ...
-    'Alb' => __DIR__.'/../vendor/',
+    'Alb' => __DIR__.'/../vendor/bundles',
 ));
 ```
 
