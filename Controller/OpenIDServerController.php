@@ -15,6 +15,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
+require_once 'Auth/OpenID/Server.php';
+require_once 'Auth/OpenID/FileStore.php';
+
 class OpenIDServerController
 {
     private $server;
