@@ -1,0 +1,30 @@
+{
+    "name": "raphox/AlbOpenIDServerBundle",
+    "type": "symfony-bundle",
+    "description": "OpenID Provider bundle",
+    "keywords": ["OpenID", "Authentication", "Server", "Provider", "User"],
+    "homepage": "https://github.com/raphox/AlbOpenIDServerBundle",
+    "authors": [
+        {
+            "name": "Arnaud Le Blanc",
+            "email": "arnaud.lb@gmail.com"
+        },
+        {
+            "name": "Raphael A. Araújo",
+            "email": "raphox.araujo@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1*",
+        "symfony/security-bundle": ">=2.1*"
+        "twig/twig": "*",
+        "symfony/yaml": "2.1.*",
+        "symfony/validator": "2.1.*",
+        "raphox/php-openid": "*"
+    },
+    "autoload": {
+        "psr-0": { "Alb\\OpenIDServerBundle": "" }
+    },
+    "target-dir": "Alb/OpenIDServerBundle"
+}
