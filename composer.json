@@ -1,5 +1,5 @@
 {
-    "name": "raphox/AlbOpenIDServerBundle",
+    "name": "raphox/alb-open-id-server-bundle",
     "type": "symfony-bundle",
     "description": "OpenID Provider bundle",
     "keywords": ["OpenID", "Authentication", "Server", "Provider", "User"],
