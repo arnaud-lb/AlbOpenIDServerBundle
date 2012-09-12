@@ -84,6 +84,12 @@ class OpenIDServerController
 
     public function trustAction(Request $request)
     {
+        if (!$this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')){
+            $request->getSession()->set('_security.target_path', $request->headers->get('referer'));
+
+            throw new AccessDeniedException();
+        }
+
         require_once 'Auth/OpenID/SReg.php';
 
         $server = $this->getServer();
@@ -106,13 +112,6 @@ class OpenIDServerController
         }
 
         $sRegRequest = \Auth_OpenID_SRegRequest::fromOpenIDRequest($openidRequest);
-
-        if (!$this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')){
-            $request->getSession()->set('_security.target_path', $this->getTrustUri($params, true));
-
-            throw new AccessDeniedException();
-        }
-
         $user = $this->securityContext->getToken()->getUser();
         $fields = $this->getFieldsData($user, $sRegRequest);
 
@@ -151,7 +150,7 @@ class OpenIDServerController
     protected function createTrustForm()
     {
         $form = $this->formFactory
-            ->createNamedBuilder('form', 'open_id_trust')
+            ->createNamedBuilder('open_id_trust', 'form')
             ->getForm();
 
         return $form;
