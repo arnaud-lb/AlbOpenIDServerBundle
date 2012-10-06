@@ -2,6 +2,8 @@
 
 OpenID Provider bundle.
 
+This is a work in progress and untested, **do not use**.
+
 ## Installation
 
 ### Step1: Download AlbOpenIDServerBundle
