@@ -68,6 +68,7 @@ class OpenIDServerController
 
         } else if ('checkid_immediate' === $openidRequest->mode) {
 
+            throw new HttpException(400, "unsupported")
             $openidResponse = $openidRequest->answer(true, null, $identifier);
             $webResponse = $server->encodeResponse($openidResponse);
             return $this->convertResponse($webResponse);
