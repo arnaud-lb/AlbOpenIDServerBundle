@@ -18,9 +18,9 @@
         </ul>
     {% endif %}
 
-    <form action="{{ form_action }}" method="POST" {{ form_enctype(form) }}>
+    <form action="" method="POST" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
-        <input type="submit" name="trust" value="Authenticate" />
+        <input type="submit" name="trust" value="Approve" />
     </form>
 
 {% endblock %}

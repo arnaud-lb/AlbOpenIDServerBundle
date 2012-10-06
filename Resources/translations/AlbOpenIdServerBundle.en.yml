@@ -1,0 +1,13 @@
+
+trust_form:
+    field_with_value:
+        nickname: Nickname: %value%
+        email: E-mail address: %value%
+        fullname: Name: %value%
+        dob: Date for birth: %value%
+        gender: %value%
+        postcode: %value%
+        country: %value%
+        language: %value%
+        timzone: %value%
+
