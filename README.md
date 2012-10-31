@@ -15,7 +15,7 @@ Add the following lines in your deps file:
 ```
 [AlbOpenIDServerBundle]
     git=git://github.com/arnaud-lb/AlbOpenIDServerBundle.git
-    target=bundles/Alb/AlbOpenIDServerBundle
+    target=bundles/Alb/OpenIDServerBundle
     
 [php-openid]
     git=git://github.com/openid/php-openid.git
@@ -55,7 +55,7 @@ Add the ``Alb`` namespace to your autoloader:
 
 $loader->registerNamespaces(array(
     // ...
-    'Alb' => __DIR__.'/../vendor/',
+    'Alb' => __DIR__.'/../vendor/bundles',
 ));
 ```
 
@@ -151,6 +151,24 @@ Add this to app/config/routing.yml:
 alb_open_id_server:
     resource: "@AlbOpenIDServerBundle/Resources/config/routing.xml"
     prefix: /openid
+```
+
+### Security
+
+For access session security data, add this to app/config/security.yml:
+
+``` yaml
+security:
+    ...
+
+    firewalls:
+        ...
+
+        secured_openid:
+            pattern:    ^/openid
+            anonymous: ~
+            http_basic:
+                realm: "Secured OpenID Area"
 ```
 
 ## Usage

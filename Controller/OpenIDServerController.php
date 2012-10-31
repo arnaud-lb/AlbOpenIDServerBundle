@@ -3,17 +3,18 @@
 namespace Alb\OpenIDServerBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Acme\OpenidDemoBundle\Storage;
 use Alb\OpenIDServerBundle\Adapter\AdapterInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+require_once 'Auth/OpenID/Server.php';
+require_once 'Auth/OpenID/FileStore.php';
 
 class OpenIDServerController
 {
@@ -23,7 +24,7 @@ class OpenIDServerController
     protected $router;
     protected $formFactory;
     protected $templating;
-
+    
     public function __construct(\Auth_OpenID_Server $server, AdapterInterface $adapter, SecurityContextInterface $securityContext, RouterInterface $router, FormFactoryInterface $formFactory, EngineInterface $templating)
     {
         $this->server = $server;
@@ -84,6 +85,12 @@ class OpenIDServerController
 
     public function trustAction(Request $request)
     {
+        if (!$this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')){
+            $request->getSession()->set('_security.target_path', $request->headers->get('referer'));
+
+            throw new AccessDeniedException();
+        }
+
         require_once 'Auth/OpenID/SReg.php';
 
         $server = $this->getServer();
@@ -144,7 +151,7 @@ class OpenIDServerController
     protected function createTrustForm()
     {
         $form = $this->formFactory
-            ->createNamedBuilder('form', 'open_id_trust')
+            ->createNamedBuilder('open_id_trust', 'form')
             ->getForm();
 
         return $form;
@@ -245,9 +252,9 @@ class OpenIDServerController
         return $this->generateUrl('alb_open_id_server_xrds', array(), true);
     }
 
-    protected function getTrustUri($params)
+    protected function getTrustUri($params, $absolute = false)
     {
-        return $this->generateUrl('alb_open_id_server_trust', $params);
+        return $this->generateUrl('alb_open_id_server_trust', $params, $absolute);
     }
 
     protected function getIdentifierUri($unique, $params = array())
